@@ -1,28 +1,5 @@
 // nuxt.config.ts
 export default defineNuxtConfig({
-  head: {
-    script: [
-      {
-        src: 'https://www.googletagmanager.com/gtag/js?id=G-L6XV805N79',
-        async: true,
-      },
-      {
-        hid: 'gtag-init',
-        innerHTML: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-L6XV805N79');
-        `,
-        type: 'text/javascript',
-        charset: 'utf-8',
-      },
-    ],
-    __dangerouslyDisableSanitizersByTagID: {
-      'gtag-init': ['innerHTML'],
-    },
-  },
-
   // SSR по умолчанию
   ssr: true,
 
@@ -52,11 +29,31 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'KING DESIGNN', // Измените на нужный title
+      title: 'KING DESIGNN',
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: 'https://mir-s3-cdn-cf.behance.net/user/276/31ca23120630055.6569a05a93d8a.png' } // Укажите путь к вашему favicon
-      ]
-    }
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: 'https://mir-s3-cdn-cf.behance.net/user/276/31ca23120630055.6569a05a93d8a.png',
+        },
+      ],
+      script: [
+        {
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-L6XV805N79',
+          async: true,
+        },
+        {
+          key: 'gtag-init',
+          innerHTML: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-L6XV805N79');
+          `,
+          type: 'application/javascript', // Optional, modern browsers default to JavaScript
+        },
+      ],
+    },
   },
 
   devServer: {

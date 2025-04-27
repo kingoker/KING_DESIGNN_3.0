@@ -1,5 +1,28 @@
 // nuxt.config.ts
 export default defineNuxtConfig({
+  head: {
+    script: [
+      {
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-L6XV805N79',
+        async: true,
+      },
+      {
+        hid: 'gtag-init',
+        innerHTML: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-L6XV805N79');
+        `,
+        type: 'text/javascript',
+        charset: 'utf-8',
+      },
+    ],
+    __dangerouslyDisableSanitizersByTagID: {
+      'gtag-init': ['innerHTML'],
+    },
+  },
+
   // SSR по умолчанию
   ssr: true,
 

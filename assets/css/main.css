@@ -26,6 +26,9 @@
   color: rgba(0,255,209,0.8) !important;
   text-shadow: 0 0 8px rgba(0,255,209,0.8) !important;
 }
+.ProseMirror{
+  padding: 10px;
+}
 
 }
 

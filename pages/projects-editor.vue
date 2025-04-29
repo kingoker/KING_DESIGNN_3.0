@@ -72,11 +72,7 @@
                 </div>
                 <div class="md:col-span-2">
                   <label class="block text-sm mb-1">Long Description (Markdown)</label>
-                  <textarea
-                    v-model="proj.long_description"
-                    rows="4"
-                    class="w-full px-3 py-2 bg-gray-700 text-gray-100 rounded border border-gray-600 resize-none"
-                  ></textarea>
+                  <editor v-model="proj.long_description" class="w-full px-3 py-2 bg-gray-700 text-gray-100 rounded border border-gray-600 resize-none"/>
                 </div>
                 <div class="md:col-span-2">
                   <label class="block text-sm mb-1">Images (по одной URL на строку)</label>
@@ -145,12 +141,7 @@
                 <option value="live">Live</option>
                 <option value="soon">Coming Soon</option>
               </select>
-              <textarea
-                v-model="newProj.long_description"
-                rows="4"
-                placeholder="long_description"
-                class="w-full px-3 py-2 bg-gray-700 text-gray-100 rounded border border-gray-600 resize-none"
-              ></textarea>
+              <editor v-model="newProj.long_description" class="w-full px-3 py-2 bg-gray-700 text-gray-100 rounded border border-gray-600 resize-none"/>
               <textarea
                 v-model="newProj.imagesText"
                 rows="3"
@@ -169,6 +160,7 @@
   </template>
   
   <script setup lang="ts">
+  import Editor from '~/components/Editor.vue'
   import { ref, reactive, onMounted } from 'vue'
   import { useSupabase } from '~/composables/useSupabase'
   

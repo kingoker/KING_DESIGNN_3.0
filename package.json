@@ -13,6 +13,13 @@
   "dependencies": {
     "@nuxtjs/supabase": "^1.5.0",
     "@supabase/supabase-js": "^2.49.4",
+    "@tiptap/core": "^2.11.7",
+    "@tiptap/extension-color": "^2.11.7",
+    "@tiptap/extension-link": "^2.11.7",
+    "@tiptap/extension-placeholder": "^2.11.7",
+    "@tiptap/pm": "^2.11.7",
+    "@tiptap/starter-kit": "^2.11.7",
+    "@tiptap/vue-3": "^2.11.7",
     "gsap": "^3.12.7",
     "lucide-vue-next": "^0.503.0",
     "markdown-it": "^14.1.0",
@@ -21,6 +28,9 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.13.2"
+    "@netlify/functions": "^3.0.4",
+    "@netlify/zip-it-and-ship-it": "^9.16.0",
+    "@nuxtjs/tailwindcss": "^6.13.2",
+    "sass-embedded": "^1.87.0"
   }
 }

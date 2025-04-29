@@ -8,7 +8,10 @@ export default defineNuxtConfig({
   ],
 
   build: {
-    transpile: ['gsap']
+    transpile: [
+      'gsap',
+
+    ]
   },
 
   plugins: [
@@ -62,7 +65,9 @@ export default defineNuxtConfig({
     https: false,        // ВАЖНО: отключаем HTTPS
   },
 
-  css: ['~/assets/css/main.css'],
+  css: [
+    '~/assets/css/main.css'
+  ],
 
   compatibilityDate: '2025-04-22'
 })

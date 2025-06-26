@@ -41,7 +41,7 @@
           <img
             :src="p.image_url"
             alt=""
-            class="relative z-10 w-full h-60 object-cover group-hover:brightness-110"
+            class="relative z-10 w-full h-100 object-cover group-hover:brightness-110"
           />
 
           <!-- Информация -->

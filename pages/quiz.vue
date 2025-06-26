@@ -1,40 +1,44 @@
 <template>
   <div ref="root" class="min-h-screen relative overflow-hidden bg-black text-white">
-    <!-- Canvas для звёздного неонового фона -->
     <canvas ref="canvas" class="absolute inset-0 w-full h-full"></canvas>
 
-    <!-- Контент опроса поверх фона -->
     <div class="relative z-10 flex flex-col items-center justify-start h-full px-4 pt-[100px]">
-      <!-- Заголовок -->
-      <h1 ref="title" class="text-4xl sm:text-5xl font-extrabold text-center mb-12
-          text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-green-400
-          drop-shadow-[0_0_20px_rgba(0,255,209,0.8)]">
+      <h1 ref="title" class="text-4xl sm:text-5xl font-extrabold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-green-400 drop-shadow-[0_0_20px_rgba(0,255,209,0.8)]">
         🚀 Прокачай свою идею<br/>с KING DESIGNN
       </h1>
 
       <div v-if="loading" class="italic text-lg">Загрузка…</div>
 
-      <div v-else class="w-full max-w-lg space-y-8">
+      <div v-else class="w-full max-w-2xl space-y-8">
         <transition name="fade-slide" mode="out-in">
-          <!-- Карточка вопроса -->
           <div v-if="currentIndex < sortedQuestions.length"
                :key="currentQuestion.id"
-               class="relative p-8 rounded-2xl border-4 border-transparent backdrop-blur-lg bg-black/50
-                      before:absolute before:inset-0 before:rounded-2xl before:border before:border-[rgba(0,255,209,0.6)]
-                      before:animate-border-shift before:pointer-events-none">
+               class="relative p-8 rounded-2xl border-4 border-transparent backdrop-blur-lg bg-black/50 before:absolute before:inset-0 before:rounded-2xl before:border before:border-[rgba(0,255,209,0.6)] before:animate-border-shift before:pointer-events-none">
+
             <p class="text-xl sm:text-2xl font-semibold mb-6 text-cyan-300">{{ currentQuestion.text }}</p>
-            <div class="space-y-4">
-              <label v-for="opt in optionsFor(currentQuestion.id)" :key="opt.id"
-                     class="flex items-center space-x-3 cursor-pointer hover:text-cyan-200 transition">
-                <input :type="currentQuestion.type"
-                       :name="`q-${currentQuestion.id}`"
-                       :value="opt.id"
-                       :checked="isChecked(currentQuestion.id, opt.id)"
-                       @change="onAnswerChange(currentQuestion.id, opt.id, $event.target.checked)"
-                       class="h-5 w-5 accent-cyan-400 focus:outline-none" />
-                <span class="select-none">{{ opt.label }}</span>
-              </label>
+
+            <div class="space-y-6">
+              <div v-for="opt in optionsFor(currentQuestion.id)" :key="opt.id"
+                   class="p-4 rounded-lg border border-cyan-500/30 hover:border-cyan-300 transition cursor-pointer"
+                   :class="{ 'bg-cyan-500/10': isChecked(currentQuestion.id, opt.id) }"
+                   @click="onAnswerChange(currentQuestion.id, opt.id, true)">
+
+                <label class="flex items-start space-x-3 cursor-pointer">
+                  <input :type="currentQuestion.type"
+                         :name="`q-${currentQuestion.id}`"
+                         :value="opt.id"
+                         :checked="isChecked(currentQuestion.id, opt.id)"
+                         @change="onAnswerChange(currentQuestion.id, opt.id, $event.target.checked)"
+                         class="mt-1 h-5 w-5 accent-cyan-400" />
+
+                  <div>
+                    <span class="block font-medium">{{ opt.label }}</span>
+                    <span v-if="opt.description" class="block text-sm text-white/60 mt-1">{{ opt.description }}</span>
+                  </div>
+                </label>
+              </div>
             </div>
+
             <div class="mt-8 flex justify-between">
               <button @click="prev"
                       :disabled="currentIndex === 0"
@@ -42,9 +46,7 @@
                 Назад
               </button>
               <button @click="next"
-                      class="px-6 py-2 bg-gradient-to-r from-cyan-400 to-green-400
-                             hover:from-cyan-300 hover:to-green-300 rounded-lg uppercase font-bold
-                             tracking-wide shadow-lg shadow-cyan-500/30 transition">
+                      class="px-6 py-2 bg-gradient-to-r from-cyan-400 to-green-400 hover:from-cyan-300 hover:to-green-300 rounded-lg uppercase font-bold tracking-wide shadow-lg shadow-cyan-500/30 transition">
                 {{ currentIndex < sortedQuestions.length - 1 ? 'Далее' : 'К форме' }}
               </button>
             </div>
@@ -53,33 +55,25 @@
             </div>
           </div>
 
-          <!-- Форма контакта -->
           <form v-else :key="'contact'" @submit.prevent="onSubmit"
-                class="relative p-8 rounded-2xl border-4 border-transparent backdrop-blur-lg bg-black/50
-                       before:absolute before:inset-0 before:rounded-2xl before:border before:border-[rgba(0,255,209,0.6)]
-                       before:animate-border-shift before:pointer-events-none space-y-6">
+                class="relative p-8 rounded-2xl border-4 border-transparent backdrop-blur-lg bg-black/50 before:absolute before:inset-0 before:rounded-2xl before:border before:border-[rgba(0,255,209,0.6)] before:animate-border-shift before:pointer-events-none space-y-6">
             <p class="text-2xl font-bold mb-6 text-green-400">Финальная стоимость: {{ approximateCost }} $</p>
             <div class="space-y-4">
               <label class="block">
                 <span class="block font-semibold mb-1 text-cyan-300">Имя*</span>
-                <input v-model="contact.name" type="text" required
-                       class="w-full px-4 py-2 bg-gray-800/70 text-white rounded-lg focus:ring-2 focus:ring-cyan-400 transition" />
+                <input v-model="contact.name" type="text" required class="w-full px-4 py-2 bg-gray-800/70 text-white rounded-lg focus:ring-2 focus:ring-cyan-400 transition" />
               </label>
               <label class="block">
                 <span class="block font-semibold mb-1 text-cyan-300">Email</span>
-                <input v-model="contact.email" type="email"
-                       class="w-full px-4 py-2 bg-gray-800/70 text-white rounded-lg focus:ring-2 focus:ring-cyan-400 transition" />
+                <input v-model="contact.email" type="email" class="w-full px-4 py-2 bg-gray-800/70 text-white rounded-lg focus:ring-2 focus:ring-cyan-400 transition" />
               </label>
               <label class="block">
                 <span class="block font-semibold mb-1 text-cyan-300">Телефон</span>
-                <input v-model="contact.phone" type="tel"
-                       class="w-full px-4 py-2 bg-gray-800/70 text-white rounded-lg focus:ring-2 focus:ring-cyan-400 transition" />
+                <input v-model="contact.phone" type="tel" class="w-full px-4 py-2 bg-gray-800/70 text-white rounded-lg focus:ring-2 focus:ring-cyan-400 transition" />
               </label>
             </div>
             <button type="submit"
-                    class="mt-4 w-full py-3 bg-gradient-to-r from-cyan-400 to-green-400
-                           hover:from-cyan-300 hover:to-green-300 rounded-lg uppercase font-bold
-                           tracking-wide shadow-lg shadow-green-500/30 transition"
+                    class="mt-4 w-full py-3 bg-gradient-to-r from-cyan-400 to-green-400 hover:from-cyan-300 hover:to-green-300 rounded-lg uppercase font-bold tracking-wide shadow-lg shadow-green-500/30 transition"
                     :disabled="submitting">
               {{ submitting ? 'Отправка…' : 'Отправить ответы' }}
             </button>
@@ -89,6 +83,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, onBeforeUnmount, computed } from 'vue'

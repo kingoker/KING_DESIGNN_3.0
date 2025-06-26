@@ -9,19 +9,9 @@
       <h1 ref="title"
           class="uppercase font-black text-white text-6xl sm:text-7xl md:text-8xl lg:text-9xl leading-tight drop-shadow-[0_0_15px_rgba(0,255,209,0.9)]">
         KING DESIGNN<br>
-        <span class="tracking-widest inline-flex items-center">
-          STUDIO
-          <img
-            src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHBmbGhqY3BrcWhqZzQyeXlrcjZvOWRkOHkwcXdyeWYwdjU2ZGJ6ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VGVE4PeGQO0krhLh9T/giphy.gif"
-            alt="Studio"
-            loading="lazy"
-            class="h-[1em] w-auto ml-2"
-          />
-        </span>
       </h1>
-      <p ref="subtitle"
-         class="mt-4 text-white/70 text-lg sm:text-xl md:text-2xl drop-shadow-[0_0_8px_rgba(0,255,209,0.7)]">
-        Инновации. Эстетика. Ваше будущее начинается здесь.
+      <p ref="subtitle" class="max-w-3xl mt-3 text-[#00ffd1] text-lg sm:text-xl md:text-2xl tracking-wide drop-shadow-[0_0_6px_rgba(0,255,209,0.6)]">
+        Мы создаём мощные визуальные решения и автоматизируем бизнес-процессы с помощью современных технологий.
       </p>
       <button ref="cta"
               @click="$router.push('/quiz')"
@@ -30,7 +20,7 @@
                      shadow-[0_0_10px_rgba(0,255,209,0.8)]
                      hover:shadow-[0_0_20px_rgba(0,255,209,1)]
                      transition-shadow duration-300">
-        ✨ Рассчитать стоимость
+        ✨ Рассчитать стоимость проекта
       </button>
     </div>
   </section>

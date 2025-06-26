@@ -11,6 +11,7 @@ interface Option {
   question_id: number
   label: string
   weight: number
+  description?: string 
 }
 interface Settings {
   base_rate: number
@@ -31,7 +32,10 @@ export const useQuiz = () => {
     if (qErr) throw qErr
     questions.value = qs || []
 
-    const { data: opts, error: oErr } = await supabase.from<Option>('options').select('*')
+    const { data: opts, error: oErr } = await supabase
+      .from<Option>('options')
+      .select('id, question_id, label, weight, description')
+
     if (oErr) throw oErr
     options.value = opts || []
 

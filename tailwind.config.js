@@ -3,10 +3,13 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // перезаписываем утилиту font-sans
         sans: ['"Exo 2"', 'Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        // если вы хотите оставить Roboto как fallback
-      }
+      },
+      colors: {
+        primary: '#24F038',
+        background: '#121926',
+        backgroundSecondary: '#080F1C',
+      },
     }
   },
   // если вы используете JIT, не забудьте указать пути к файлам

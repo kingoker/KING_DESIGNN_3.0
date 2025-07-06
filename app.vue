@@ -2,7 +2,7 @@
   <div>
     <Header />
 
-    <main class="pt-16">
+    <main>
       <NuxtPage />
     </main>
     

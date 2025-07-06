@@ -77,7 +77,7 @@ import { Instagram, Youtube } from 'lucide-vue-next'
 const links = [
   { text: 'Главная', to: '/' },
   { text: 'Портфолио', to: '/portfolio' },
-  { text: 'Блог', to: '/blog' },
+  { text: 'Интересное', to: '/blog' },
   { text: 'Команда', to: '/team' },
   { text: 'Контакты', to: '/contacts' },
 ]

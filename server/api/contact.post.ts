@@ -4,7 +4,7 @@ import { useRuntimeConfig } from '#imports'
 import { $fetch } from 'ofetch'
 
 export default defineEventHandler(async (event) => {
-  const { name, email, message } = await readBody(event)
+  const { name, email, topic } = await readBody(event)
   const config = useRuntimeConfig()
 
   // Инициализируем Supabase
@@ -13,50 +13,48 @@ export default defineEventHandler(async (event) => {
     config.public.supabaseKey
   )
 
-  // Логируем конфиг (для отладки)
-  console.log('cfg:', {
-    url:  config.public.supabaseUrl,
-    key:  config.public.supabaseKey,
-    bot:  config.telegramBotToken,
-    chat: config.telegramChatId
-  })
-
-  // 1) Записать в Supabase
+  // 1) Записать в Supabase (таблица contact_form_responses)
   const { error: dbError } = await supabase
-    .from('contacts')
-    .insert([{ name, email, message, created_at: new Date().toISOString() }])
+    .from('contact_form_responses')
+    .insert([{ name, email, topic, created_at: new Date().toISOString() }])
 
   if (dbError) {
     throw createError({ statusCode: 500, statusMessage: dbError.message })
   }
 
-  // 2) Отправить в Telegram — оформляем красиво с эмоджи и форматированием
-  const timestamp = new Date().toLocaleString('ru-RU', { timeZone: 'America/New_York' })
-  const telegramText = [
-    '💌 *Новый запрос от клиента KING DESIGNN* 💌',
-    '\n',
-    `👤 *Имя:* _${name}_`,
-    `✉️ *Email:* _${email}_`,
-    `🕒 *Время:* _${timestamp}_`,
-    '\n',
-    '*💬 Сообщение:*',
-    `${message}`,
-    '\n',
-    '🔥 Мы свяжемся с вами в ближайшее время! Спасибо за обращение. 🔥'
-  ].join('\n')
+  // 2) Отправить в Telegram (если есть chat ids)
+  const chatIdsRaw = config.telegramChatIds || ''
+  const chatIds = chatIdsRaw.split(',').map(id => id.trim()).filter(Boolean)
+  if (chatIds.length > 0 && config.telegramBotToken) {
+    const timestamp = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })
+    const telegramText = [
+      '💌 *Новая заявка с формы KING DESIGNN*',
+      '',
+      `👤 *Имя:* _${name || '-'}_`,
+      `✉️ *Email:* _${email || '-'}_`,
+      `🕒 *Время:* _${timestamp}_`,
+      '',
+      '*💬 Тема обращения:*',
+      `${topic || '-'}`,
+      '',
+      '🔥 Мы свяжемся с вами в ближайшее время!'
+    ].join('\n')
 
-  try {
-    await $fetch(`https://api.telegram.org/bot${config.telegramBotToken}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: {
-        chat_id:    config.telegramChatId,
-        text:       telegramText,
-        parse_mode: 'Markdown'
+    for (const chatId of chatIds) {
+      try {
+        await $fetch(`https://api.telegram.org/bot${config.telegramBotToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: {
+            chat_id: chatId,
+            text: telegramText,
+            parse_mode: 'Markdown'
+          }
+        })
+      } catch (err) {
+        console.error('Telegram send error:', err)
       }
-    })
-  } catch (err) {
-    console.error('Telegram send error:', err)
+    }
   }
 
   return { success: true }

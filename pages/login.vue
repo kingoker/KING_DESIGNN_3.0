@@ -81,14 +81,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth } from '~/composables/useAuth'
 
 const pass = ref('')
 const router = useRouter()
+const { login, logout } = useAuth()
 
 function onSubmit() {
   if (pass.value.trim() === 'myking253') {
+    login(true)
     router.push('/dashboard')
   } else {
+    logout()
     alert('❌ Ты не достоин этой чести! 🤷‍♂️👑😜')
     router.push('/')
   }

@@ -1,10 +1,13 @@
 <template>
   <header
     ref="headerRef"
-    class="fixed top-5 md:w-full lg:w-auto left-1/2 transform -translate-x-1/2 z-50 rounded-full bg-[#121926]/50 backdrop-blur-md border border-[#4E5562] shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
+    :class="[
+      'fixed top-5 left-0 right-0 mx-5 md:mx-auto md:max-w-4xl z-50 rounded-full bg-[#121926]/50 backdrop-blur-md border border-[#4E5562] shadow-[0_4px_12px_rgba(0,0,0,0.25)] transition-all duration-300',
+      isHeaderVisible || mobileMenuOpen ? 'translate-y-0 opacity-100 pointer-events-auto' : '-translate-y-[120%] opacity-0 pointer-events-none'
+    ]"
   >
   <!-- inset-x-5 -->
-    <div class="h-16 w-max flex gap-[100px] items-center justify-between px-4 sm:px-6 lg:px-8">
+    <div class="h-16 w-full flex items-center justify-between px-4 sm:px-6 lg:px-8">
       <!-- ЛОГО -->
       <NuxtLink to="/" class="flex items-center space-x-2 hover:opacity-80 z-10">
         <img
@@ -107,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from '#imports'
 
 const mobileMenuOpen = ref(false)
@@ -121,6 +124,43 @@ const links = [
 ]
 watch(() => route.path, () => {
   mobileMenuOpen.value = false
+})
+
+// --- Hide on scroll logic ---
+const isHeaderVisible = ref(true)
+let lastScroll = 0
+let ticking = false
+
+function onScroll() {
+  if (mobileMenuOpen.value) {
+    isHeaderVisible.value = true
+    lastScroll = window.scrollY
+    return
+  }
+  const curr = window.scrollY
+  if (curr <= 0) {
+    isHeaderVisible.value = true
+  } else if (curr > lastScroll) {
+    isHeaderVisible.value = false
+  } else if (curr < lastScroll) {
+    isHeaderVisible.value = true
+  }
+  lastScroll = curr
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        onScroll()
+        ticking = false
+      })
+      ticking = true
+    }
+  })
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
 })
 </script>
 

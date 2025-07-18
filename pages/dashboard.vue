@@ -75,6 +75,8 @@
 </template>
 
 <script setup lang="ts">
+import adminMiddleware from '~/middleware/admin'
+definePageMeta({ middleware: [adminMiddleware] })
 // Пока без логики — просто визуалка.
 // Позже создадим страницу /team-editor и подключим CRUD для участников.
 </script>
